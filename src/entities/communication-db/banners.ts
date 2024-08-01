@@ -62,6 +62,7 @@ export class Banners extends BaseEntity {
   @Column('date', { name: 'created_at', nullable: false })
   createdAt!: Date;
 
+  // TODO mapear os relacionamentos
   // @JoinTable({
   //   inverseJoinColumn: {
   //     name: 'federated_state_id',

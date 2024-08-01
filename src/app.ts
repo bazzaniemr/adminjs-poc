@@ -13,6 +13,8 @@ import { TermsOfUse } from './entities/communication-db/termsOfUse.ts'
 import { FederatedStates } from './entities/support-db/federatedStates.ts'
 import { Organizers } from './entities/support-db/organizers.ts'
 import { Services } from './entities/system-db/services.ts'
+import { ApiTokens } from './entities/system-db/apiTokens.ts'
+import { ApiTokenPrivileges } from './entities/system-db/apiTokenPrivileges.ts'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -73,6 +75,14 @@ const buildResources = {
       resource: Services,
       options: {},
     },    
+    {
+      resource: ApiTokens,
+      options: {},
+    },    
+    // {
+    //   resource: ApiTokenPrivileges,
+    //   options: {},
+    // },    
   ]
 }
 
@@ -82,7 +92,6 @@ const start = async () => {
   await initializeDataSources();
   
   const adminOptions = buildResources;
-
   const admin = new AdminJS(adminOptions);
 
   const ConnectSession = Connect(session)

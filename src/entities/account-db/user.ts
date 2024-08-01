@@ -27,6 +27,7 @@ export class User extends BaseEntity {
   @Column('date', { name: 'updated_at', nullable: false })
   updatedAt!: Date;
 
+  // TODO mapear os relacionamentos
   // @OneToOne(() => Company)
   // @JoinColumn()
   // companyId: Company

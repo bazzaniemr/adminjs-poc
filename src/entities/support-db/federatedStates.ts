@@ -25,6 +25,7 @@ export class FederatedStates extends BaseEntity {
   @Column('date', { name: 'updated_at', nullable: false })
   updatedAt!: Date;
 
+  // TODO mapear os relacionamentos
   // @ManyToMany(() => Banners, (banners) => banners.federatedStates)
   // banners!: Banners[];
 

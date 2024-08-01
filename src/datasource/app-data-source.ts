@@ -6,6 +6,8 @@ import { FederatedStates } from "../entities/support-db/federatedStates.ts";
 import { Organizers } from "../entities/support-db/organizers.ts";
 import { User } from "../entities/account-db/user.ts";
 import { Services } from "../entities/system-db/services.ts";
+import { ApiTokens } from "../entities/system-db/apiTokens.ts";
+import { ApiTokenPrivileges } from "../entities/system-db/apiTokenPrivileges.ts";
 
 export const accountDataSource = new DataSource({
     type: "postgres",
@@ -51,7 +53,7 @@ export const systemDataSource = new DataSource({
     username: "admin",
     password: "admin",
     database: "system",
-    entities: [Services],
+    entities: [ApiTokens, Services/*, ApiTokenPrivileges*/],
     logging: true,
     synchronize: false,
 });
