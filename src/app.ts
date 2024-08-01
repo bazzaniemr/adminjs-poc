@@ -11,7 +11,6 @@ import { Policies } from './entities/communication-db/policies.ts'
 import { FederatedStates } from './entities/support-db/federatedStates.ts'
 import { Organizers } from './entities/support-db/organizers.ts'
 import { Banners } from './entities/communication-db/banners.ts'
-import { FederatedStatesCom } from './entities/communication-db/federatedStates.ts'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -42,7 +41,6 @@ const start = async () => {
   const adminOptions = {
     resources: [
       Banners,
-      FederatedStatesCom,
       Policies,
       TermsOfUse,
 

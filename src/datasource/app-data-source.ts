@@ -1,6 +1,5 @@
 import { DataSource } from "typeorm"
 import { Banners } from "../entities/communication-db/banners.ts";
-import { FederatedStatesCom } from "../entities/communication-db/federatedStates.ts";
 import { TermsOfUse } from "../entities/communication-db/termsOfUse.ts";
 import { Policies } from "../entities/communication-db/policies.ts";
 import { FederatedStates } from "../entities/support-db/federatedStates.ts";
@@ -10,11 +9,11 @@ import { Organizers } from "../entities/support-db/organizers.ts";
 export const communicationDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 13276,
+    port: 19636,
     username: "admin",
     password: "admin",
     database: "communication",
-    entities: [Banners, FederatedStatesCom, Policies, TermsOfUse],
+    entities: [Banners, Policies, TermsOfUse],
     logging: true,
     synchronize: false,
 });
@@ -23,7 +22,7 @@ export const communicationDataSource = new DataSource({
 export const supportDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 13276,
+    port: 19636,
     username: "admin",
     password: "admin",
     database: "support",
