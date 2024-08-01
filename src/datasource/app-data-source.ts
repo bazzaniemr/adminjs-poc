@@ -57,3 +57,15 @@ export const systemDataSource = new DataSource({
     logging: true,
     synchronize: false,
 });
+
+export const userdataDataSource = new DataSource({
+    type: "postgres",
+    host: "0.tcp.sa.ngrok.io",
+    port: 19636,
+    username: "admin",
+    password: "admin",
+    database: "userdata",
+    entities: [/*UserPriorityOrganizers*/],
+    logging: true,
+    synchronize: false,
+});

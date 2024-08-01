@@ -5,7 +5,7 @@ import Connect from 'connect-pg-simple'
 import session from 'express-session'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
 
-import { accountDataSource, communicationDataSource, supportDataSource, systemDataSource } from './datasource/app-data-source.ts'
+import { accountDataSource, communicationDataSource, supportDataSource, systemDataSource, userdataDataSource } from './datasource/app-data-source.ts'
 import { User } from './entities/account-db/user.ts'
 import { Banners } from './entities/communication-db/banners.ts'
 import { Policies } from './entities/communication-db/policies.ts'
@@ -42,6 +42,7 @@ const initializeDataSources = async () => {
   await communicationDataSource.initialize();
   await supportDataSource.initialize();
   await systemDataSource.initialize();
+  await userdataDataSource.initialize();
 }
 
 // TODO criar um ResourceFactory com a classe ResourceWithOptions
@@ -81,6 +82,10 @@ const buildResources = {
     },    
     // {
     //   resource: ApiTokenPrivileges,
+    //   options: {},
+    // },    
+    // {
+    //   resource: UserPriorityOrganizers,
     //   options: {},
     // },    
   ]
