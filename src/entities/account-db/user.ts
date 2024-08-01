@@ -12,10 +12,10 @@ export class User extends BaseEntity {
   @Column('varchar', { name: 'email', nullable: false })
   email!: string;
   
-  @Column('varchar', { name: 'phone', nullable: false })
+  @Column('varchar', { name: 'phone', nullable: true })
   phone: string;
   
-  @Column('varchar', { name: 'avatar_url', nullable: false })
+  @Column('varchar', { name: 'avatar_url', nullable: true })
   avatarUrl: string;
   
   @Column('varchar', { name: 'password', nullable: false })

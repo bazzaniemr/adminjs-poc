@@ -5,13 +5,14 @@ import Connect from 'connect-pg-simple'
 import session from 'express-session'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
 
-import { accountDataSource, communicationDataSource, supportDataSource } from './datasource/app-data-source.ts'
+import { accountDataSource, communicationDataSource, supportDataSource, systemDataSource } from './datasource/app-data-source.ts'
 import { User } from './entities/account-db/user.ts'
 import { Banners } from './entities/communication-db/banners.ts'
 import { Policies } from './entities/communication-db/policies.ts'
 import { TermsOfUse } from './entities/communication-db/termsOfUse.ts'
 import { FederatedStates } from './entities/support-db/federatedStates.ts'
 import { Organizers } from './entities/support-db/organizers.ts'
+import { Services } from './entities/system-db/services.ts'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -34,31 +35,60 @@ const authenticate = async (email: string, password: string) => {
   return null;
 }
 
-const start = async () => {
-  const app = express();
-
+const initializeDataSources = async () => {
   await accountDataSource.initialize();
   await communicationDataSource.initialize();
   await supportDataSource.initialize();
-  const adminOptions = {
-    resources: [
-      User,
+  await systemDataSource.initialize();
+}
 
-      Banners,
-      Policies,
-      TermsOfUse,
+// TODO criar um ResourceFactory com a classe ResourceWithOptions
+const buildResources = {
+  resources: [
+    {
+      resource: User,
+      options: {},
+    },
+    {
+      resource: Banners,
+      options: {},
+    },
+    {
+      resource: Policies,
+      options: {},
+    },
+    {
+      resource: TermsOfUse,
+      options: {},
+    },
+    {
+      resource: FederatedStates,
+      options: {},
+    },
+    {
+      resource: Organizers,
+      options: {},
+    },    
+    {
+      resource: Services,
+      options: {},
+    },    
+  ]
+}
 
-      FederatedStates,
-      Organizers,
-    ],
-  }
+const start = async () => {
+  const app = express();
+
+  await initializeDataSources();
+  
+  const adminOptions = buildResources;
 
   const admin = new AdminJS(adminOptions);
 
   const ConnectSession = Connect(session)
   const sessionStore = new ConnectSession({
     conObject: {
-      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:13276/communication',
+      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:19636/communication',
       ssl: process.env.NODE_ENV === 'production',
     },
     tableName: 'session',
