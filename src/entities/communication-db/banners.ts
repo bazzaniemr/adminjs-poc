@@ -10,7 +10,7 @@ import {
   MoreThanOrEqual,
 } from 'typeorm';
 
-import { FederatedStatesCom } from './federatedStates.ts';
+import { FederatedStates } from '../support-db/federatedStates.ts';
 
 export enum BannerType {
   BOTTOM_INITIAL_PAGE = 'bottom_initial_page',
@@ -62,45 +62,45 @@ export class Banners extends BaseEntity {
   @Column('date', { name: 'created_at', nullable: false })
   createdAt!: Date;
 
-  @JoinTable({
-    inverseJoinColumn: {
-      name: 'federated_state_id',
-      referencedColumnName: 'id',
-    },
-    joinColumn: {
-      name: 'banner_id',
-      referencedColumnName: 'id',
-    },
-    name: 'banner_federated_states',
-  })
-  @ManyToMany(() => FederatedStatesCom, (state) => state.banners, {
-    cascade: true,
-    eager: true,
-  })
-  federatedStates!: FederatedStatesCom[];
+  // @JoinTable({
+  //   inverseJoinColumn: {
+  //     name: 'federated_state_id',
+  //     referencedColumnName: 'id',
+  //   },
+  //   joinColumn: {
+  //     name: 'banner_id',
+  //     referencedColumnName: 'id',
+  //   },
+  //   name: 'banner_federated_states',
+  // })
+  // @ManyToMany(() => FederatedStates, (state) => state.banners, {
+  //   cascade: true,
+  //   eager: true,
+  // })
+  // federatedStates!: FederatedStates[];
 
   static getTableName(): string {
     return this.getRepository().metadata.tableName;
   }
 
-  static findByOrganizerFederalState(
-    federalStates: string[],
-  ): Promise<Banners[]> {
-    return Banners.find({
-      order: {
-        createdAt: 'DESC',
-      },
-      relations: ['federatedStates'],
-      where: {
-        enabled: true,
-        endsAt: MoreThanOrEqual(new Date()),
-        federatedStates: {
-          uf: In(federalStates),
-        },
-        startsAt: LessThanOrEqual(new Date()),
-      },
-    });
-  }
+  // static findByOrganizerFederalState(
+  //   federalStates: string[],
+  // ): Promise<Banners[]> {
+  //   return Banners.find({
+  //     order: {
+  //       createdAt: 'DESC',
+  //     },
+  //     relations: ['federatedStates'],
+  //     where: {
+  //       enabled: true,
+  //       endsAt: MoreThanOrEqual(new Date()),
+  //       federatedStates: {
+  //         uf: In(federalStates),
+  //       },
+  //       startsAt: LessThanOrEqual(new Date()),
+  //     },
+  //   });
+  // }
 
   public incrementClicks(): void {
     this.clicks += 1;

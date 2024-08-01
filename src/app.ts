@@ -5,12 +5,13 @@ import Connect from 'connect-pg-simple'
 import session from 'express-session'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
 
-import { TermsOfUse } from './entities/communication-db/termsOfUse.ts'
-import { communicationDataSource, supportDataSource } from './datasource/app-data-source.ts'
+import { accountDataSource, communicationDataSource, supportDataSource } from './datasource/app-data-source.ts'
+import { User } from './entities/account-db/user.ts'
+import { Banners } from './entities/communication-db/banners.ts'
 import { Policies } from './entities/communication-db/policies.ts'
+import { TermsOfUse } from './entities/communication-db/termsOfUse.ts'
 import { FederatedStates } from './entities/support-db/federatedStates.ts'
 import { Organizers } from './entities/support-db/organizers.ts'
-import { Banners } from './entities/communication-db/banners.ts'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -36,10 +37,13 @@ const authenticate = async (email: string, password: string) => {
 const start = async () => {
   const app = express();
 
+  await accountDataSource.initialize();
   await communicationDataSource.initialize();
   await supportDataSource.initialize();
   const adminOptions = {
     resources: [
+      User,
+
       Banners,
       Policies,
       TermsOfUse,

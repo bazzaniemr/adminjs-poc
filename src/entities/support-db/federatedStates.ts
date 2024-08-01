@@ -1,5 +1,12 @@
 import 'reflect-metadata';
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { 
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryColumn,
+  ManyToMany
+} from 'typeorm';
+// import { Banners } from '../communication-db/banners.ts';
 
 @Entity('federated_states')
 export class FederatedStates extends BaseEntity {
@@ -17,4 +24,8 @@ export class FederatedStates extends BaseEntity {
 
   @Column('date', { name: 'updated_at', nullable: false })
   updatedAt!: Date;
+
+  // @ManyToMany(() => Banners, (banners) => banners.federatedStates)
+  // banners!: Banners[];
+
 }
