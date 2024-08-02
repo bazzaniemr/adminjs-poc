@@ -12,7 +12,7 @@ import { ApiTokenPrivileges } from "../entities/system-db/apiTokenPrivileges.ts"
 export const accountDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 19636,
+    port: 15594,
     username: "admin",
     password: "admin",
     database: "account",
@@ -24,7 +24,7 @@ export const accountDataSource = new DataSource({
 export const communicationDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 19636,
+    port: 15594,
     username: "admin",
     password: "admin",
     database: "communication",
@@ -37,7 +37,7 @@ export const communicationDataSource = new DataSource({
 export const supportDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 19636,
+    port: 15594,
     username: "admin",
     password: "admin",
     database: "support",
@@ -49,7 +49,7 @@ export const supportDataSource = new DataSource({
 export const systemDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 19636,
+    port: 15594,
     username: "admin",
     password: "admin",
     database: "system",
@@ -61,7 +61,7 @@ export const systemDataSource = new DataSource({
 export const userdataDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 19636,
+    port: 15594,
     username: "admin",
     password: "admin",
     database: "userdata",

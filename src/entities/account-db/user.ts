@@ -19,7 +19,7 @@ export class User extends BaseEntity {
   avatarUrl: string;
   
   @Column('varchar', { name: 'password', nullable: false })
-  passsword!: string;
+  password!: string;
 
   @Column('date', { name: 'created_at', nullable: false })
   createdAt!: Date;

@@ -1,11 +1,19 @@
-import AdminJS, { ResourceWithOptions } from 'adminjs'
+import AdminJS, { ResourceWithOptions, ComponentLoader } from 'adminjs'
 import AdminJSExpress from '@adminjs/express'
 import express from 'express'
 import Connect from 'connect-pg-simple'
 import session from 'express-session'
 import * as AdminJSTypeorm from '@adminjs/typeorm'
+import { DefaultAuthProvider } from 'adminjs';
+import bcrypt from 'bcrypt'
 
-import { accountDataSource, communicationDataSource, supportDataSource, systemDataSource, userdataDataSource } from './datasource/app-data-source.ts'
+import {
+  accountDataSource,
+  communicationDataSource,
+  supportDataSource,
+  systemDataSource,
+  userdataDataSource 
+} from './datasource/app-data-source.ts'
 import { User } from './entities/account-db/user.ts'
 import { Banners } from './entities/communication-db/banners.ts'
 import { Policies } from './entities/communication-db/policies.ts'
@@ -23,20 +31,6 @@ AdminJS.registerAdapter({
 
 const PORT = 3000;
 
-const DEFAULT_ADMIN = {
-  id: '1',
-  email: 'admin@email.com',
-  password: 'admin123',
-  role: "admin"
-}
-
-const authenticate = async (email: string, password: string) => {
-  if (email === DEFAULT_ADMIN.email && password === DEFAULT_ADMIN.password) {
-    return Promise.resolve(DEFAULT_ADMIN);
-  }
-  return null;
-}
-
 const initializeDataSources = async () => {
   await accountDataSource.initialize();
   await communicationDataSource.initialize();
@@ -44,6 +38,36 @@ const initializeDataSources = async () => {
   await systemDataSource.initialize();
   await userdataDataSource.initialize();
 }
+
+const findUserByEmail = async (email: string) => {
+  try {
+    const user = await accountDataSource.getRepository(User).findOneOrFail({ where: { email } });
+    return user; 
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    return null;
+  }
+}
+
+const authenticate =  async({ email, password}: { email: string; password: string }) => {
+  const user = await findUserByEmail(email);
+  
+  if (user) {
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      return {
+        email: user.email
+      };
+    }
+  } 
+  return null;
+}
+
+const componentLoader = new ComponentLoader();
+const authProvider = new DefaultAuthProvider({
+  componentLoader,
+  authenticate,
+});
 
 // TODO criar um ResourceFactory com a classe ResourceWithOptions
 const buildResources = {
@@ -102,7 +126,7 @@ const start = async () => {
   const ConnectSession = Connect(session)
   const sessionStore = new ConnectSession({
     conObject: {
-      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:19636/communication',
+      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:15594/communication',
       ssl: process.env.NODE_ENV === 'production',
     },
     tableName: 'session',
@@ -113,21 +137,14 @@ const start = async () => {
   const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
     admin,
     {
-      authenticate,
-      cookieName: 'adminjs',
       cookiePassword: 'sessionsecret',
+      provider: authProvider,
     },
     null,
     {
-      store: sessionStore,
       resave: true,
-      saveUninitialized: true,
       secret: 'sessionsecret',
-      cookie: {
-        httpOnly: process.env.NODE_ENV === 'production',
-        secure: process.env.NODE_ENV === 'production',
-      },
-      name: 'adminjs',
+      saveUninitialized: true,
     }
   );
 
