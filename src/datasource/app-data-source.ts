@@ -1,30 +1,32 @@
 import { DataSource } from "typeorm"
-import { Banners } from "../entities/communication-db/banners.ts";
-import { TermsOfUse } from "../entities/communication-db/termsOfUse.ts";
-import { Policies } from "../entities/communication-db/policies.ts";
-import { FederatedStates } from "../entities/support-db/federatedStates.ts";
-import { Organizers } from "../entities/support-db/organizers.ts";
-import { User } from "../entities/account-db/user.ts";
-import { Services } from "../entities/system-db/services.ts";
-import { ApiTokens } from "../entities/system-db/apiTokens.ts";
-import { ApiTokenPrivileges } from "../entities/system-db/apiTokenPrivileges.ts";
+import { Banners } from "../entities/db/communication/banners.ts";
+import { TermsOfUse } from "../entities/db/communication/termsOfUse.ts";
+import { Policies } from "../entities/db/communication/policies.ts";
+import { FederatedStates } from "../entities/db/support/federatedStates.ts";
+import { Organizers } from "../entities/db/support/organizers.ts";
+import { User } from "../entities/db/account/user.ts";
+import { Services } from "../entities/db/system/services.ts";
+import { ApiTokens } from "../entities/db/system/apiTokens.ts";
+import { ApiTokenPrivileges } from "../entities/db/system/apiTokenPrivileges.ts";
+import { Log } from "../entities/utils/log.ts";
 
 export const accountDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 15594,
+    port: 14679,
     username: "admin",
     password: "admin",
     database: "account",
     entities: [User],
     logging: true,
     synchronize: false,
+    migrations: ['src/migration/**/*.ts'],
 });
 
 export const communicationDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 15594,
+    port: 14679,
     username: "admin",
     password: "admin",
     database: "communication",
@@ -37,7 +39,7 @@ export const communicationDataSource = new DataSource({
 export const supportDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 15594,
+    port: 14679,
     username: "admin",
     password: "admin",
     database: "support",
@@ -49,7 +51,7 @@ export const supportDataSource = new DataSource({
 export const systemDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 15594,
+    port: 14679,
     username: "admin",
     password: "admin",
     database: "system",
@@ -61,11 +63,24 @@ export const systemDataSource = new DataSource({
 export const userdataDataSource = new DataSource({
     type: "postgres",
     host: "0.tcp.sa.ngrok.io",
-    port: 15594,
+    port: 14679,
     username: "admin",
     password: "admin",
     database: "userdata",
     entities: [/*UserPriorityOrganizers*/],
+    logging: true,
+    synchronize: false,
+});
+
+export const logDataSource = new DataSource({
+    type: "postgres",
+    host: "0.tcp.sa.ngrok.io",
+    port: 14679,
+    username: "admin",
+    password: "admin",
+    database: "log",
+    entities: [Log],
+    migrations: ['src/migrations/**/*.ts'],
     logging: true,
     synchronize: false,
 });

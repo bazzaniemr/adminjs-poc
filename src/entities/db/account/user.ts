@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity('User')
+@Entity('users')
 export class User extends BaseEntity {
   @PrimaryColumn('int4', { generated: 'increment', name: 'id' })
   readonly id!: number;
@@ -12,20 +12,20 @@ export class User extends BaseEntity {
   @Column('varchar', { name: 'email', nullable: false })
   email!: string;
   
-  @Column('varchar', { name: 'phone', nullable: true })
-  phone: string;
+  // @Column('varchar', { name: 'phone', nullable: true })
+  // phone: string;
   
-  @Column('varchar', { name: 'avatar_url', nullable: true })
-  avatarUrl: string;
+  // @Column('varchar', { name: 'avatar_url', nullable: true })
+  // avatarUrl: string;
   
   @Column('varchar', { name: 'password', nullable: false })
   password!: string;
 
-  @Column('date', { name: 'created_at', nullable: false })
-  createdAt!: Date;
+  // @Column('date', { name: 'created_at', nullable: false })
+  // createdAt!: Date;
 
-  @Column('date', { name: 'updated_at', nullable: false })
-  updatedAt!: Date;
+  // @Column('date', { name: 'updated_at', nullable: false })
+  // updatedAt!: Date;
 
   // TODO mapear os relacionamentos
   // @OneToOne(() => Company)

@@ -10,19 +10,21 @@ import bcrypt from 'bcrypt'
 import {
   accountDataSource,
   communicationDataSource,
+  logDataSource,
   supportDataSource,
   systemDataSource,
   userdataDataSource 
 } from './datasource/app-data-source.ts'
-import { User } from './entities/account-db/user.ts'
-import { Banners } from './entities/communication-db/banners.ts'
-import { Policies } from './entities/communication-db/policies.ts'
-import { TermsOfUse } from './entities/communication-db/termsOfUse.ts'
-import { FederatedStates } from './entities/support-db/federatedStates.ts'
-import { Organizers } from './entities/support-db/organizers.ts'
-import { Services } from './entities/system-db/services.ts'
-import { ApiTokens } from './entities/system-db/apiTokens.ts'
-import { ApiTokenPrivileges } from './entities/system-db/apiTokenPrivileges.ts'
+import { User } from './entities/db/account/user.ts'
+import { Banners } from './entities/db/communication/banners.ts'
+import { Policies } from './entities/db/communication/policies.ts'
+import { TermsOfUse } from './entities/db/communication/termsOfUse.ts'
+import { FederatedStates } from './entities/db/support/federatedStates.ts'
+import { Organizers } from './entities/db/support/organizers.ts'
+import { Services } from './entities/db/system/services.ts'
+import { ApiTokens } from './entities/db/system/apiTokens.ts'
+import { ApiTokenPrivileges } from './entities/db/system/apiTokenPrivileges.ts'
+import loggerFeature from '@adminjs/logger'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -37,6 +39,7 @@ const initializeDataSources = async () => {
   await supportDataSource.initialize();
   await systemDataSource.initialize();
   await userdataDataSource.initialize();
+  await logDataSource.initialize();
 }
 
 const findUserByEmail = async (email: string) => {
@@ -51,7 +54,6 @@ const findUserByEmail = async (email: string) => {
 
 const authenticate =  async({ email, password}: { email: string; password: string }) => {
   const user = await findUserByEmail(email);
-  
   if (user) {
     const match = await bcrypt.compare(password, user.password);
     if (match) {
@@ -87,6 +89,15 @@ const buildResources = {
     {
       resource: TermsOfUse,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+          userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: FederatedStates,
@@ -117,7 +128,7 @@ const buildResources = {
 
 const start = async () => {
   const app = express();
-
+  
   await initializeDataSources();
   
   const adminOptions = buildResources;
@@ -126,7 +137,7 @@ const start = async () => {
   const ConnectSession = Connect(session)
   const sessionStore = new ConnectSession({
     conObject: {
-      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:15594/communication',
+      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:14679/communication',
       ssl: process.env.NODE_ENV === 'production',
     },
     tableName: 'session',
