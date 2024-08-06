@@ -12,6 +12,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
-    "sourceMap": true
-  }
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+  },
+  "include": ["src/**/*.ts", "src/types/**/*.d.ts"],
+  "exclude": ["node_modules"]
 }

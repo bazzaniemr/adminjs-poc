@@ -10,7 +10,6 @@ import bcrypt from 'bcrypt'
 import {
   accountDataSource,
   communicationDataSource,
-  logDataSource,
   supportDataSource,
   systemDataSource,
   userdataDataSource 
@@ -25,6 +24,7 @@ import { Services } from './entities/db/system/services.ts'
 import { ApiTokens } from './entities/db/system/apiTokens.ts'
 import { ApiTokenPrivileges } from './entities/db/system/apiTokenPrivileges.ts'
 import loggerFeature from '@adminjs/logger'
+import { Log } from './entities/utils/log.ts'
 
 AdminJS.registerAdapter({
   Resource: AdminJSTypeorm.Resource,
@@ -39,7 +39,6 @@ const initializeDataSources = async () => {
   await supportDataSource.initialize();
   await systemDataSource.initialize();
   await userdataDataSource.initialize();
-  await logDataSource.initialize();
 }
 
 const findUserByEmail = async (email: string) => {
@@ -76,7 +75,16 @@ const buildResources = {
   resources: [
     {
       resource: User,
-      options: {},
+      options: {},      
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'user',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: Banners,
@@ -89,15 +97,6 @@ const buildResources = {
     {
       resource: TermsOfUse,
       options: {},
-      features: [
-        loggerFeature({
-          componentLoader,
-          propertiesMapping: {
-            user: 'userId',
-          },
-          userIdAttribute: 'id',
-        }),
-      ],
     },
     {
       resource: FederatedStates,
@@ -122,7 +121,11 @@ const buildResources = {
     // {
     //   resource: UserPriorityOrganizers,
     //   options: {},
-    // },    
+    // }, 
+    {
+      resource: Log,
+      options: {},
+    },   
   ]
 }
 
@@ -137,7 +140,7 @@ const start = async () => {
   const ConnectSession = Connect(session)
   const sessionStore = new ConnectSession({
     conObject: {
-      connectionString: 'postgres://admin:admin@0.tcp.sa.ngrok.io:14679/communication',
+      connectionString: process.env.DATABASE_COMPLETE_URL,
       ssl: process.env.NODE_ENV === 'production',
     },
     tableName: 'session',

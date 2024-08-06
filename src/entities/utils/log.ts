@@ -1,10 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
+import { User } from '../db/account/user.ts';
 
 export interface ILog {
   id: number;
   action: string;
   resource: string;
-  userId: string | null;
+  userId: number | null;
   recordId: number;
   recordTitle: string | null;
   difference: Record<string, unknown> | null;
@@ -38,6 +39,11 @@ export class Log extends BaseEntity implements ILog {
   @Column({ name: 'resource', type: 'varchar', length: 128, nullable: false })
   public resource: string;
 
-  @Column({ name: 'user_id', type: 'varchar', nullable: false })
-  public userId: string;
+  @OneToOne(() => User)
+  @JoinColumn({ name: "user_id", referencedColumnName: "id", foreignKeyConstraintName: "FK_logs_user"})
+  @Column({ name: 'user_id', type: 'int4', nullable: false })
+  public userId: number;
+
+  // @ManyToOne(() => User, user => user.logs)
+  // public userId: User | null;
 }
