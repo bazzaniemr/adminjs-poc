@@ -1,5 +1,4 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
-import { User } from '../db/account/user.ts';
 
 export interface ILog {
   id: number;
@@ -13,7 +12,7 @@ export interface ILog {
   updatedAt?: Date;
 }
 
-@Entity({ name: 'logs' })
+@Entity({ name: 'Log' })
 export class Log extends BaseEntity implements ILog {
   @PrimaryGeneratedColumn()
   public id: number;

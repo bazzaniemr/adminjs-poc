@@ -20,7 +20,7 @@ export const accountDataSource = new DataSource({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: "account",
-    entities: [User, Log],
+    entities: [User],
     logging: true,
     synchronize: false,
     migrations: ['src/migration/**/*.ts'],
@@ -58,7 +58,7 @@ export const systemDataSource = new DataSource({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: "system",
-    entities: [ApiTokens, Services/*, ApiTokenPrivileges*/],
+    entities: [ApiTokens, Services/*, ApiTokenPrivileges*/, Log],
     logging: true,
     synchronize: false,
 });
@@ -74,16 +74,3 @@ export const userdataDataSource = new DataSource({
     logging: true,
     synchronize: false,
 });
-
-// export const logDataSource = new DataSource({
-//     type: "postgres",
-//     host: "0.tcp.sa.ngrok.io",
-//     port: 18582,
-//     username: "admin",
-//     password: "admin",
-//     database: "log",
-//     entities: [Log],
-//     migrations: ['src/migrations/**/*.ts'],
-//     logging: true,
-//     synchronize: false,
-// });

@@ -187,7 +187,14 @@ const buildResources = {
     // }, 
     {
       resource: Log,
-      options: {},
+      options: {
+        actions: {
+          list: {
+            isVisible: false,
+            isAccessible: false
+          }
+        }
+      },
     },   
   ]
 }
