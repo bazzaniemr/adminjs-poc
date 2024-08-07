@@ -1,4 +1,4 @@
-import AdminJS, { ResourceWithOptions, ComponentLoader } from 'adminjs'
+import AdminJS, { ComponentLoader } from 'adminjs'
 import AdminJSExpress from '@adminjs/express'
 import express from 'express'
 import Connect from 'connect-pg-simple'
@@ -22,7 +22,6 @@ import { FederatedStates } from './entities/db/support/federatedStates.ts'
 import { Organizers } from './entities/db/support/organizers.ts'
 import { Services } from './entities/db/system/services.ts'
 import { ApiTokens } from './entities/db/system/apiTokens.ts'
-import { ApiTokenPrivileges } from './entities/db/system/apiTokenPrivileges.ts'
 import loggerFeature from '@adminjs/logger'
 import { Log } from './entities/utils/log.ts'
 
@@ -57,6 +56,7 @@ const authenticate =  async({ email, password}: { email: string; password: strin
     const match = await bcrypt.compare(password, user.password);
     if (match) {
       return {
+        id: String(user.id),
         email: user.email
       };
     }
@@ -80,7 +80,7 @@ const buildResources = {
         loggerFeature({
           componentLoader,
           propertiesMapping: {
-            user: 'user',
+            user: 'userId',
           },
          userIdAttribute: 'id',
         }),
@@ -89,30 +89,93 @@ const buildResources = {
     {
       resource: Banners,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: Policies,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: TermsOfUse,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: FederatedStates,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },
     {
       resource: Organizers,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },    
     {
       resource: Services,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },    
     {
       resource: ApiTokens,
       options: {},
+      features: [
+        loggerFeature({
+          componentLoader,
+          propertiesMapping: {
+            user: 'userId',
+          },
+         userIdAttribute: 'id',
+        }),
+      ],
     },    
     // {
     //   resource: ApiTokenPrivileges,

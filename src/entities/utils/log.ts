@@ -5,7 +5,7 @@ export interface ILog {
   id: number;
   action: string;
   resource: string;
-  userId: number | null;
+  userId: string | null;
   recordId: number;
   recordTitle: string | null;
   difference: Record<string, unknown> | null;
@@ -39,11 +39,6 @@ export class Log extends BaseEntity implements ILog {
   @Column({ name: 'resource', type: 'varchar', length: 128, nullable: false })
   public resource: string;
 
-  @OneToOne(() => User)
-  @JoinColumn({ name: "user_id", referencedColumnName: "id", foreignKeyConstraintName: "FK_logs_user"})
-  @Column({ name: 'user_id', type: 'int4', nullable: false })
-  public userId: number;
-
-  // @ManyToOne(() => User, user => user.logs)
-  // public userId: User | null;
+  @Column({ name: 'user_id', type: 'varchar', nullable: false })
+  public userId: string;
 }
